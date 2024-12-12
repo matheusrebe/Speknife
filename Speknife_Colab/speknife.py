@@ -81,7 +81,7 @@ for arquivo in arquivos:
         energy_uncertainty = [0]*config_mandatory['channel_number']
 
         #uncertainty of the raw espectra
-        if config_mandatory['uncertainty_analysis'] == True:
+        if config['uncertainty_analysis'] == True:
             energy_uncertainty, data_uncertainty = stat_analy.spectra_uncertainty(energy, energy_uncertainty, corrected_data, data_uncertainty, config['r_pearson'], config['a_uncertainty'], config['b_uncertainty'])
             print('You choose to evaluate the uncertainty \n')
             print('Processing it... \n')
@@ -115,7 +115,7 @@ for arquivo in arquivos:
                 continue
 
         #User output control
-        if config_mandatory['uncertainty_analysis'] == True:
+        if config['uncertainty_analysis'] == True:
             print('Experimental mean energy is {} keV'.format(round(stat_analy.mean_energy(raw_data,energy),5)))
             print('Corrected mean energy is {} keV with an uncertainty of {}'.format(round(stat_analy.mean_energy(corrected_data,energy),5),round(stat_analy.mean_energy_uncertainty(corrected_data, data_uncertainty, energy, energy_uncertainty),5)))
 
@@ -125,21 +125,21 @@ for arquivo in arquivos:
 
         #Tube voltage
         if config['tube_voltage_measurement'] == True:
-            if config_mandatory['uncertainty_analysis'] == True:
-                tube_kv, tube_kv_uncertainty, r_pearson_peso =stat_analy.tube_kv(config_mandatory['uncertainty_analysis'],config_mandatory['a'], config_mandatory['b'], config_mandatory['tube_voltage'], energy,energy_uncertainty, corrected_data, data_uncertainty,spectrum_quality,config['save_plot'],config['tube_voltage_plot'],config['shift'])
+            if config['uncertainty_analysis'] == True:
+                tube_kv, tube_kv_uncertainty, r_pearson_peso =stat_analy.tube_kv(config['uncertainty_analysis'],config_mandatory['a'], config_mandatory['b'], config_mandatory['tube_voltage'], energy,energy_uncertainty, corrected_data, data_uncertainty,spectrum_quality,config['save_plot'],config['tube_voltage_plot'],config['shift'])
                 print("The voltage is "+str(round(tube_kv,4))+ " kV with a uncertainty of "+ str(round(tube_kv_uncertainty,4))+ " kV")
                 print('The weighted linear regress r coefficient is '+str(round(r_pearson_peso,4)))
                 print('\n')
-                mfiles.writing_files(energy, energy_uncertainty,raw_data,corrected_data, data_uncertainty,spectrum_quality,config_mandatory['a'], config_mandatory['b'], config_mandatory['tube_voltage'],config_mandatory['channel_number'],config_mandatory['uncertainty_analysis'],config['tube_voltage_measurement'], tube_kv, r_pearson_peso ,tube_kv_uncertainty) 
+                mfiles.writing_files(energy, energy_uncertainty,raw_data,corrected_data, data_uncertainty,spectrum_quality,config_mandatory['a'], config_mandatory['b'], config_mandatory['tube_voltage'],config_mandatory['channel_number'],config['uncertainty_analysis'],config['tube_voltage_measurement'], tube_kv, r_pearson_peso ,tube_kv_uncertainty) 
             else:
-                tube_kv, r_pearson =stat_analy.tube_kv(config_mandatory['uncertainty_analysis'],config_mandatory['a'], config_mandatory['b'], config_mandatory['tube_voltage'], energy,energy_uncertainty, corrected_data, data_uncertainty,spectrum_quality,config['tube_voltage_plot'],config['save_plot'],config['shift'])
+                tube_kv, r_pearson =stat_analy.tube_kv(config['uncertainty_analysis'],config_mandatory['a'], config_mandatory['b'], config_mandatory['tube_voltage'], energy,energy_uncertainty, corrected_data, data_uncertainty,spectrum_quality,config['tube_voltage_plot'],config['save_plot'],config['shift'])
                 print("The voltage is "+str(round(tube_kv,4))+ " kV")
                 print('The weighted linear regress r coefficient is '+str(round(r_pearson,4)))
                 print('\n')
-                mfiles.writing_files(energy, energy_uncertainty,raw_data,corrected_data, data_uncertainty,spectrum_quality,config_mandatory['a'], config_mandatory['b'], config_mandatory['tube_voltage'],config_mandatory['channel_number'],config_mandatory['uncertainty_analysis'],config['tube_voltage_measurement'],tube_kv, r_pearson)
+                mfiles.writing_files(energy, energy_uncertainty,raw_data,corrected_data, data_uncertainty,spectrum_quality,config_mandatory['a'], config_mandatory['b'], config_mandatory['tube_voltage'],config_mandatory['channel_number'],config['uncertainty_analysis'],config['tube_voltage_measurement'],tube_kv, r_pearson)
 
         else:
-            mfiles.writing_files(energy, energy_uncertainty,raw_data,corrected_data, data_uncertainty,spectrum_quality,config_mandatory['a'], config_mandatory['b'], config_mandatory['tube_voltage'],config_mandatory['channel_number'],config_mandatory['uncertainty_analysis'],config['tube_voltage_measurement'])
+            mfiles.writing_files(energy, energy_uncertainty,raw_data,corrected_data, data_uncertainty,spectrum_quality,config_mandatory['a'], config_mandatory['b'], config_mandatory['tube_voltage'],config_mandatory['channel_number'],config['uncertainty_analysis'],config['tube_voltage_measurement'])
 
         if config['plot'] == True:
             plot.spectrum_data_plot(energy, energy_uncertainty, raw_data,corrected_data,data_uncertainty,spectrum_quality, config_mandatory['tube_voltage'], config['plot_type'], config['normalization_number'],config['save_plot'], config['other_database'],config['reference_path'],config['base_name'],config['reference_name'],escape_corre,corre_effic,corre_compton)
