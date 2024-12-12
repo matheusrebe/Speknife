@@ -2,26 +2,11 @@
 tube_voltage                100 #Must be an integer
 channel_number              2048
 a                           0.07599
-a_uncertainty               0.0000072
 b                           -0.08387
-b_uncertainty               0.0054
-r_pearson                   -0.984
 mca                         True
-uncertainty_analysis        True
 
 #Plot control
 plot                        True #show or not the plot
 plot_type                   2 
 normalization_number        1 #plot_type 4 only a normalization 0 is possible, it will ignore any other normalization number you may require
 save_plot                   True
-
-#Tube voltage analysis
-tube_voltage_plot           True
-tube_voltage_measurement    True
-shift                       -12 #kv plot shift
-
-#Display comparisons plot
-other_database              True
-base_name                   N
-reference_path              reference_radiation/PTB_spectra/narrow_beam/ #Path to the reference data to be compared 
-reference_name              PTB #Reference name for the quality to display on the plot
