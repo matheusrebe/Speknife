@@ -1,26 +1,32 @@
 import numpy as np
 import ploting as plot
+from scipy.stats import t
 
-def spectra_uncertainty(energy, energy_uncertainty, data, data_uncertainty,r_pearson, a_uncertainty, b_uncertainty):
+def spectra_uncertainty(energy, energy_uncertainty, data, data_uncertainty,r_pearson, a_uncertainty, b_uncertainty,m):
     data_uncertainty = []
     energy_uncertainty = []
+    degrees_freedom_energy = []
+    coverage_factor_energy = []
     for i in range(len(data)):
         data_uncertainty.append(np.sqrt(data[i]))
         energy_uncertainty.append(np.sqrt(((i*a_uncertainty)**2+b_uncertainty**2+2*r_pearson*i*a_uncertainty*b_uncertainty)+(energy[101]-energy[100])**2/12))
-    return energy_uncertainty , data_uncertainty
+        degrees_freedom_energy.append(pow(energy_uncertainty[i],4)/(pow(np.sqrt((i*a_uncertainty)**2+b_uncertainty**2+2*r_pearson*i*a_uncertainty*b_uncertainty),4)/(m-2)))
+        coverage_factor_energy.append(float(t.ppf(1-0.05/2, degrees_freedom_energy[i])))
+    return energy_uncertainty, data_uncertainty, coverage_factor_energy, degrees_freedom_energy
 
 def mean_energy(spectrum_data,energy):
     mean_energy = np.average(energy, weights=spectrum_data)
     
     return mean_energy
 
-def mean_energy_uncertainty(data, data_uncertainty, energy, energy_uncertainty): 
-    uncertainty = []
-    uncertainty = 0
+def mean_energy_uncertainty(data, data_uncertainty, energy, energy_uncertainty,degrees_freedom_energy): 
+    variance = 0
     for i in range(len(data)):
-        uncertainty = (((energy[i]-mean_energy(data,energy))*data_uncertainty[i])/(sum(data)))**2 + ((data[i]*energy_uncertainty[i])/(sum(data)))**2 + uncertainty
- 
-    return np.sqrt(uncertainty) 
+        variance = (((energy[i]-mean_energy(data,energy))*data_uncertainty[i])/(sum(data)))**2 + ((data[i]*energy_uncertainty[i])/(sum(data)))**2 + variance
+    degrees_freedom_mean_energy = pow(np.sqrt(variance),4)/np.sum(pow(np.array(data)*np.array(energy_uncertainty)/sum(data),4)/np.array(degrees_freedom_energy)) 
+    coverege_factor_mean_energy = float(t.ppf(1-0.05/2,degrees_freedom_mean_energy))
+    
+    return np.sqrt(variance) , coverege_factor_mean_energy
 
 def tube_kv(uncertainty_analysis,a, b, tube_voltage, energy,energy_uncertainty, data, data_uncertainty, spectrum_quality,save_plot,tube_voltage_plot,shift): 
     channel = round((tube_voltage-b)/a) 
@@ -38,7 +44,7 @@ def tube_kv(uncertainty_analysis,a, b, tube_voltage, energy,energy_uncertainty, 
         transfered_uncertainty = np.sqrt(y_uncertainty**2+(a_convencional*x_uncertainty)**2)
 
         ################################################################################################
-        ######                              Ajuste linear com pesos                               ######   
+        ######                              weighted straight line fit                            ######   
         ################################################################################################
 
         sum = 0
@@ -70,14 +76,15 @@ def tube_kv(uncertainty_analysis,a, b, tube_voltage, energy,energy_uncertainty, 
         incerteza_b_peso = incerteza_a_peso * np.sqrt(x2_med_pond)
         r_pearson_peso = (a_peso * np.sqrt(varx_2)) / np.sqrt(vary_2)
         r_ab = -(x_med_pond*(incerteza_a_peso)**2)/(incerteza_a_peso*incerteza_b_peso)
-        
+                
         tube_kv = -b_peso/a_peso
         tube_kv_uncertainty =np.sqrt(((b_peso*incerteza_a_peso)/(a_peso**2))**2+(incerteza_b_peso/a_peso)**2-2*r_ab*b_peso*incerteza_a_peso*incerteza_b_peso/(a_peso)**3)
+        coverage_factor = 2.1604
 
         if tube_voltage_plot == True:
             plot.tube_kv_plot(uncertainty_analysis,x,y,a,b,a_peso, b_peso,spectrum_quality,x_uncertainty, y_uncertainty, channel, total_canais_ajuste, shift,save_plot)
 
-        return tube_kv, tube_kv_uncertainty, round(r_pearson_peso,4)
+        return tube_kv, tube_kv_uncertainty, round(r_pearson_peso,4), coverage_factor
     
     else:
         x = np.array(energy[channel-total_canais_ajuste+shift:channel+shift]) 

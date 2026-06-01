@@ -67,16 +67,16 @@ def escape_correction(i, energy, corrected_data,tube_voltage,raw_data,a,b,escape
     corrected_data[i]=raw_data[i]-photoelectric_factor #replacing to the new correted values
     escape_corre[i] = photoelectric_factor
 
-def compton_correction(i,energy,corrected_data,a,b,corre_compton,data_uncertainty, energy_uncertainty, a_uncertainty, b_uncertainty):
-    nist_energy, nist_abs = mfiles.reading_files('/content/drive/MyDrive/Speknife_Colab/theoretical_functions_data/compton_nist.txt')#opening nist data of absorption coeficient
+def compton_correction(i,energy,corrected_data,a,b,corre_compton,data_uncertainty, energy_uncertainty, a_uncertainty, b_uncertainty,r_ab):
+    nist_energy, nist_abs = mfiles.reading_files('theoretical_functions_data/'+'compton_nist.txt')#opening nist data of absorption coeficient
     
     #Compton correction functions
     compton_edge = (2*(energy**2))/(2*energy+511) #Compton Edge Energy
     compton_edge_channel = round((compton_edge-b)/a) 
 
     #uncertainty of the compton edge energy
-    compton_edge_uncertainty = (4*energy*(2*energy+511)-2*(2+511)*(energy**2))*energy_uncertainty[i]/(2*energy+511)**2
-    compton_edge_channel_uncertainty = np.sqrt((compton_edge_uncertainty/a)**2+(b_uncertainty/a)**2+(((compton_edge-b)/a**2)*a_uncertainty)**2)
+    compton_edge_uncertainty = (2044*energy+4*energy**2)*energy_uncertainty[i]/(2*energy+511)**2
+    compton_edge_channel_uncertainty = np.sqrt((compton_edge_uncertainty/a)**2+(b_uncertainty/a)**2+(((compton_edge-b)/a**2)*a_uncertainty)**2-2*(compton_edge-b)*a_uncertainty*b_uncertainty*r_ab/a**3)
     
     if (compton_edge_channel>0): 
         #Happens for the initial channels and therefore we do nothing
@@ -100,7 +100,7 @@ def compton_correction(i,energy,corrected_data,a,b,corre_compton,data_uncertaint
                         data_uncertainty[k] = np.sqrt( (nist_abs[j]*data_uncertainty[compton_edge_channel]/compton_edge_channel)**2 + (data_uncertainty[compton_edge_channel]*compton_edge_channel_uncertainty/compton_edge_channel**2)**2)
 
 def efficiency_correction(i, energy, corrected_data,corre_effic,data_uncertainty): 
-    effic_energy, effic_data = mfiles.reading_files('/content/drive/MyDrive/Speknife_Colab/theoretical_functions_data/eficiencia_ATomal.txt')
+    effic_energy, effic_data = mfiles.reading_files('theoretical_functions_data/'+'eficiencia_ATomal.txt')
     if(energy[i]<5):
         corrected_data[i]=0 #Cutting off all counts below 5 keV in the spectrum
 
