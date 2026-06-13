@@ -52,7 +52,7 @@ def reading_files(name_file):
 
 def writing_files(energy=0,energy_uncertainty=0,raw_data=0, corrected_data = 0, data_uncertainty=0, coverege_fator_energy = 0, mean_energy_uncertainty = 0, mean_energy_coverage_factor = 0,spectrum_quality=0, a=0, b=0, tube_voltage=0,channel_number=0,uncertainty_analysis = 0,tube_voltage_measurement=0,tube_kv = 0, r_pearson = 0, tube_kv_uncertainty = 0, coverage_factor = 0): #todos os valores são zero por padrão para evitar bug
     if uncertainty_analysis == True and tube_voltage_measurement == True:
-        file = open('working_area/'+spectrum_quality.replace('.mca','')+'_corrected.txt','w')
+        file = open('/content/drive/MyDrive/Speknife_Colab/working_area/'+spectrum_quality.replace('.mca','')+'_corrected.txt','w')
         file.writelines("###################################################################################################################\n")
         file.writelines("#Corrected data of the spectrum from the file "+spectrum_quality+"\n")
         file.writelines("###################################################################################################################\n")
@@ -74,7 +74,7 @@ def writing_files(energy=0,energy_uncertainty=0,raw_data=0, corrected_data = 0, 
         file.close()
 
     elif uncertainty_analysis == True and tube_voltage_measurement == False:
-            file = open('working_area/'+spectrum_quality.replace('.mca','')+'_corrected.txt','w')
+            file = open('/content/drive/MyDrive/Speknife_Colab/working_area/'+spectrum_quality.replace('.mca','')+'_corrected.txt','w')
             file.writelines("###################################################################################################################\n")
             file.writelines("#Corrected data of the spectrum from the file "+spectrum_quality+"\n")
             file.writelines("###################################################################################################################\n")
@@ -95,7 +95,7 @@ def writing_files(energy=0,energy_uncertainty=0,raw_data=0, corrected_data = 0, 
             file.close()
     
     elif uncertainty_analysis == False and tube_voltage_measurement == True:
-        file = open('working_area/'+spectrum_quality.replace('.mca','')+'_corrected.txt','w')
+        file = open('/content/drive/MyDrive/Speknife_Colab/working_area/'+spectrum_quality.replace('.mca','')+'_corrected.txt','w')
         file.writelines("###################################################################################################################\n")
         file.writelines("#Corrected data of the spectrum from the file "+spectrum_quality+"\n")
         file.writelines("###################################################################################################################\n")
@@ -117,7 +117,7 @@ def writing_files(energy=0,energy_uncertainty=0,raw_data=0, corrected_data = 0, 
         file.close()
         
     elif uncertainty_analysis == False and tube_voltage_measurement == False:
-        file = open('working_area/'+spectrum_quality.replace('.mca','')+'_corrected.txt','w')
+        file = open('/content/drive/MyDrive/Speknife_Colab/working_area/'+spectrum_quality.replace('.mca','')+'_corrected.txt','w')
         file.writelines("###################################################################################################################\n")
         file.writelines("#Corrected data of the spectrum from the file "+spectrum_quality+"\n")
         file.writelines("###################################################################################################################\n")

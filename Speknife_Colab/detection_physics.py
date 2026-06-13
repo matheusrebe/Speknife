@@ -68,7 +68,7 @@ def escape_correction(i, energy, corrected_data,tube_voltage,raw_data,a,b,escape
     escape_corre[i] = photoelectric_factor
 
 def compton_correction(i,energy,corrected_data,a,b,corre_compton,data_uncertainty, energy_uncertainty, a_uncertainty, b_uncertainty,r_ab):
-    nist_energy, nist_abs = mfiles.reading_files('theoretical_functions_data/'+'compton_nist.txt')#opening nist data of absorption coeficient
+    nist_energy, nist_abs = mfiles.reading_files('/content/drive/MyDrive/Speknife_Colab/theoretical_functions_data/'+'compton_nist.txt')#opening nist data of absorption coeficient
     
     #Compton correction functions
     compton_edge = (2*(energy**2))/(2*energy+511) #Compton Edge Energy
@@ -100,7 +100,7 @@ def compton_correction(i,energy,corrected_data,a,b,corre_compton,data_uncertaint
                         data_uncertainty[k] = np.sqrt( (nist_abs[j]*data_uncertainty[compton_edge_channel]/compton_edge_channel)**2 + (data_uncertainty[compton_edge_channel]*compton_edge_channel_uncertainty/compton_edge_channel**2)**2)
 
 def efficiency_correction(i, energy, corrected_data,corre_effic,data_uncertainty): 
-    effic_energy, effic_data = mfiles.reading_files('theoretical_functions_data/'+'eficiencia_ATomal.txt')
+    effic_energy, effic_data = mfiles.reading_files('/content/drive/MyDrive/Speknife_Colab/theoretical_functions_data/'+'eficiencia_ATomal.txt')
     if(energy[i]<5):
         corrected_data[i]=0 #Cutting off all counts below 5 keV in the spectrum
 

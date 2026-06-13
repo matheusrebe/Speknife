@@ -49,11 +49,11 @@ for key in config_mandatory:
         print(key)
         exit()
 
-arquivos = os.listdir('working_area/')
+arquivos = os.listdir('/content/drive/MyDrive/Speknife_Colab/working_area/')
 
 for arquivo in arquivos:
     if  not arquivo.endswith("_corrected.txt") and not arquivo.startswith("repository"):
-        caminho_arquivo = os.path.join('working_area/', arquivo)
+        caminho_arquivo = os.path.join('/content/drive/MyDrive/Speknife_Colab/working_area/', arquivo)
         print('\n')
         print(f"Reading file: {arquivo}")
 
