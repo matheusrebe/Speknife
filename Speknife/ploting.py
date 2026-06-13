@@ -118,7 +118,7 @@ def tube_kv_plot(uncertainty_analysis,x,y,a,b,a_ajuste, b_ajuste,spectrum_qualit
         plt.ylim(bottom=0)
         plt.ylabel('Counts')
         plt.xlabel('Energy [keV]')
-        plt.title('Tube Voltage - '+ title[0], fontweight='bold')
+        plt.title('Peak Voltage - '+ title[0], fontweight='bold')
         plt.tight_layout()
         if save_plot==True:
             plt.savefig('tube_kv_'+spectrum_quality+'.png')
@@ -132,7 +132,7 @@ def tube_kv_plot(uncertainty_analysis,x,y,a,b,a_ajuste, b_ajuste,spectrum_qualit
         plt.ylim(bottom=0)
         plt.ylabel('Contagem')
         plt.xlabel('Energia [keV]')
-        plt.title('Tube Voltage - '+ title[0], fontweight='bold')
+        plt.title('Peak Voltage - '+ title[0], fontweight='bold')
         plt.tight_layout()
         if save_plot==True:
             plt.savefig('tube_kv_'+spectrum_quality+'.png')

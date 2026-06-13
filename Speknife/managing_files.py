@@ -50,7 +50,7 @@ def reading_files(name_file):
     else:  
         return colum_0, colum_1 
 
-def writing_files(energy=0,energy_uncertainty=0,raw_data=0, corrected_data=0, data_uncertainty=0 ,spectrum_quality=0, a=0, b=0, tube_voltage=0,channel_number=0,uncertainty_analysis = 0,tube_voltage_measurement=0,tube_kv = 0, r_pearson = 0, tube_kv_uncertainty = 0): #todos os valores são zero por padrão para evitar bug
+def writing_files(energy=0,energy_uncertainty=0,raw_data=0, corrected_data = 0, data_uncertainty=0, coverege_fator_energy = 0, mean_energy_uncertainty = 0, mean_energy_coverage_factor = 0,spectrum_quality=0, a=0, b=0, tube_voltage=0,channel_number=0,uncertainty_analysis = 0,tube_voltage_measurement=0,tube_kv = 0, r_pearson = 0, tube_kv_uncertainty = 0, coverage_factor = 0): #todos os valores são zero por padrão para evitar bug
     if uncertainty_analysis == True and tube_voltage_measurement == True:
         file = open('working_area/'+spectrum_quality.replace('.mca','')+'_corrected.txt','w')
         file.writelines("###################################################################################################################\n")
@@ -63,14 +63,14 @@ def writing_files(energy=0,energy_uncertainty=0,raw_data=0, corrected_data=0, da
         file.writelines('#Tube Voltage '+str(tube_voltage)+' kV' +'\n')
         file.writelines('#Total number of channels '+str(channel_number)+'\n')
         file.writelines("#------------------------------------------------------------------------------------------------------------------\n")
-        file.writelines("#The mean energy before was {} keV and the correted is {} keV with an uncertainty of {} \n".format(round(stat_analy.mean_energy(raw_data,energy),5),round(stat_analy.mean_energy(corrected_data,energy),5),round(stat_analy.mean_energy_uncertainty(corrected_data, data_uncertainty, energy, energy_uncertainty),5)))
-        file.writelines("#The tube voltage is {} kV with an uncertainty of {} and pearson coefficient {} \n".format(round(tube_kv,4),round(tube_kv_uncertainty,4),r_pearson))          
+        file.writelines("#The mean energy before was {} keV and the correted is {} keV with an uncertainty of {}, and a coverage factor of {} for 95% confidence level \n".format(round(stat_analy.mean_energy(raw_data,energy),5),round(stat_analy.mean_energy(corrected_data,energy),5),round(mean_energy_uncertainty,5),round(mean_energy_coverage_factor,2)))
+        file.writelines("#The tube voltage is {} kV with an uncertainty of {}, and a coverage factor of {} for 95% confidence level. The pearson coefficient {} \n".format(round(tube_kv,4),round(tube_kv_uncertainty,4),round(coverage_factor,2) ,r_pearson))          
         file.writelines("#------------------------------------------------------------------------------------------------------------------\n")
         file.writelines('#\n')
-        file.writelines("#Energy (keV); energy uncertainty (keV); counts; counts uncertainty\n")
+        file.writelines("#Energy (keV); energy uncertainty (keV); k (95%) ; counts; counts uncertainty; k (95%)\n")
     
         for i in range(len(corrected_data)):
-            file.writelines(str(energy[i])+' , '+str(round(energy_uncertainty[i],4))+' , '+str(round(corrected_data[i],4))+' , '+str(round(data_uncertainty[i],4))+'\n')
+            file.writelines(str(energy[i])+' , '+str(round(energy_uncertainty[i],4))+ ' , ' + str(round(coverege_fator_energy[i],2)) + ' , ' + str(round(corrected_data[i],4))+' , '+str(round(data_uncertainty[i],4))+ ' , ' + str(1.96) +'\n')
         file.close()
 
     elif uncertainty_analysis == True and tube_voltage_measurement == False:
@@ -91,7 +91,7 @@ def writing_files(energy=0,energy_uncertainty=0,raw_data=0, corrected_data=0, da
             file.writelines("#Energy (keV); energy uncertainty (keV); counts; counts uncertainty\n")
         
             for i in range(len(corrected_data)):
-                file.writelines(str(energy[i])+' , '+str(round(energy_uncertainty[i],4))+' , '+str(round(corrected_data[i],4))+' , '+str(round(data_uncertainty[i],4))+'\n')
+                file.writelines(str(energy[i])+' , '+str(round(energy_uncertainty[i],4))+ ' , ' + str(round(coverege_fator_energy[i],2)) + ' , ' + str(round(corrected_data[i],4))+' , '+str(round(data_uncertainty[i],4))+ ' , ' + str(1.96) +'\n')
             file.close()
     
     elif uncertainty_analysis == False and tube_voltage_measurement == True:
